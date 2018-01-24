@@ -121,7 +121,8 @@ find_erts_dir() {
         __erl="$(which erl)"
         code="io:format(\"~s\", [code:root_dir()]), halt()."
         __erl_root="$("$__erl" -noshell -eval "$code")"
-        ERTS_DIR="$__erl_root/erts-$ERTS_VSN"
+        ERTS_VSN_MAJOR="$(echo $ERTS_VSN | cut -d. -f1)"
+        ERTS_DIR="$(find "$__erl_root" -maxdepth 1 -type d -name "erts-${ERTS_VSN_MAJOR}*" | sort -t- -k2n | tail -n1)"
         ROOTDIR="$__erl_root"
     fi
 }
